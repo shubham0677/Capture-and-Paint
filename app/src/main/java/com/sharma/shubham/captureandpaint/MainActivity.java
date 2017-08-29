@@ -3,6 +3,8 @@ package com.sharma.shubham.captureandpaint;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -10,38 +12,47 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import butterknife.BindFloat;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Declare constant for image capture request
+    @BindView(R.id.capturedImageView)
+    ImageView mCapturedImageView;
+
+    @BindView(R.id.captureButton)
+    ImageView mCaptureButton;
+
+
+    private String mTempPhotoPath;
+    private Bitmap mCapturedImageBitmap;
+
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final String FILE_PROVIDER_AUTHORITY = "com.sharma.shubham.fileprovider";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-//    /**
-//     * A native method that is implemented by the 'native-lib' native library,
-//     * which is packaged with this application.
-//     */
-//      public native String stringFromJNI();
-//
-//    // Used to load the 'native-lib' library on application startup.
-//    static {
-//        System.loadLibrary("native-lib");
-//    }
+        ButterKnife.bind(this);
+    }
 
     /***
      * On click method for capture image button
      */
-    public void captureImage() {
+    public void captureImage(View v) {
         // Check for storage permission
         if(Utility.checkPermission(this)) {
             // Launch camera if permission exists
@@ -77,7 +88,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchCamera() {
-        // TODO: Launch camera and get image on result
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the temporary File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = BitmapUtils.createTempImageFile(this);
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+
+                // Get the path of the temporary file
+                mTempPhotoPath = photoFile.getAbsolutePath();
+
+                // Get the content URI for the image file
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        FILE_PROVIDER_AUTHORITY,
+                        photoFile);
+
+                // Add the URI so the camera can store the image
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+
+                // Grant permissions to the intent
+                Utility.grantUriPermissionsToIntent(this, takePictureIntent, photoURI);
+
+              // Launch the camera activity
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // If the image capture intent was called and was successful
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            processAndSetImage();
+        } else {
+            BitmapUtils.deleteImageFile(this, mTempPhotoPath);
+        }
+    }
+
+    private void processAndSetImage() {
+        mCapturedImageBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
+
+        mCaptureButton.setVisibility(View.GONE);
+        mCapturedImageView.setVisibility(View.VISIBLE);
+        mCapturedImageView.setImageBitmap(mCapturedImageBitmap);
+
+    }
 }
