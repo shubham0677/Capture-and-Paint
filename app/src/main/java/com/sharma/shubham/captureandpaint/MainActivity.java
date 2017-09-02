@@ -29,14 +29,15 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.capturedImageView)
-    ImageView mCapturedImageView;
-
     @BindView(R.id.captureButton)
     Button mCaptureButton;
 
+    @BindView(R.id.drawingView)
+    DrawingView mDrawingView;
+
     private String mTempPhotoPath;
-    private Bitmap mCapturedImageBitmap;
+
+    static Bitmap sCapturedImageBitmap;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final String FILE_PROVIDER_AUTHORITY = "com.sharma.shubham.fileprovider";
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
     }
+    
 
     /***
      * On click method for capture image button
@@ -127,10 +129,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void processAndSetImage() {
-        mCapturedImageBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
+        sCapturedImageBitmap = BitmapUtils.resamplePic(this, mTempPhotoPath);
 
         mCaptureButton.setVisibility(View.GONE);
-        mCapturedImageView.setVisibility(View.VISIBLE);
-        mCapturedImageView.setImageBitmap(mCapturedImageBitmap);
+        mDrawingView.setVisibility(View.VISIBLE);
     }
 }

@@ -77,6 +77,13 @@ public class DrawingView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
+        // Scale the image loaded/captured to size of canvas
+        MainActivity.sCapturedImageBitmap =
+                Bitmap.createScaledBitmap(MainActivity.sCapturedImageBitmap, w, h, false);
+
+        // Save image bitmap in a local variable
+        mCanvasBitmap = MainActivity.sCapturedImageBitmap;
+
         // Draw canvas on screen with image bitmap set as background
         mDrawCanvas = new Canvas(mCanvasBitmap);
     }
