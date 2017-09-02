@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView mCapturedImageView;
 
     @BindView(R.id.captureButton)
-    ImageView mCaptureButton;
-
+    Button mCaptureButton;
 
     private String mTempPhotoPath;
     private Bitmap mCapturedImageBitmap;
@@ -63,12 +63,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /***
-     * This method is called when you request permission to read and write to external storage
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -138,6 +132,5 @@ public class MainActivity extends AppCompatActivity {
         mCaptureButton.setVisibility(View.GONE);
         mCapturedImageView.setVisibility(View.VISIBLE);
         mCapturedImageView.setImageBitmap(mCapturedImageBitmap);
-
     }
 }
