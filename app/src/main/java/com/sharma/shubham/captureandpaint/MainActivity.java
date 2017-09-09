@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
     }
-    
+
 
     /***
      * On click method for capture image button
@@ -133,5 +133,11 @@ public class MainActivity extends AppCompatActivity {
 
         mCaptureButton.setVisibility(View.GONE);
         mDrawingView.setVisibility(View.VISIBLE);
+
+        //hideActionBar();
     }
+
+//    private void hideActionBar() {
+//        this.getSupportActionBar().hide();
+//    }
 }

@@ -92,7 +92,7 @@ class BitmapUtils {
         options.inMutable=true;
 
         Bitmap scaledImage =  BitmapFactory.decodeFile(imagePath, options);
-        return rotateImage(scaledImage, 90);
+        return getRotatedImage(context, imagePath, scaledImage);
     }
 
     private static Bitmap getRotatedImage(Context context, String imagePath, Bitmap bitmap) {
