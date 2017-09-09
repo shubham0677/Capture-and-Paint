@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -19,21 +20,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindFloat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements RapidFloatingActionContentLabelList
+        .OnRapidFloatingActionContentLabelListListener {
 
     @BindView(R.id.captureButton)
     Button mCaptureButton;
 
     @BindView(R.id.drawingView)
     DrawingView mDrawingView;
+
+    @BindView(R.id.activity_main_rfal)
+    RapidFloatingActionLayout mRfaLayout;
+
+    @BindView(R.id.activity_main_rfab)
+    RapidFloatingActionButton mRfaBtn;
+
+    private RapidFloatingActionHelper rfabHelper;
 
     private String mTempPhotoPath;
 
@@ -48,8 +66,58 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        RapidFloatingActionContentLabelList rfaContent =
+                new RapidFloatingActionContentLabelList(this);
+        rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
+        List<RFACLabelItem> items = new ArrayList<>();
+        items.add(new RFACLabelItem<Integer>()
+                .setLabel("Change Brush Size")
+                .setIconNormalColor(0xffd84315)
+                .setIconPressedColor(0xffbf360c)
+                .setWrapper(0)
+        );
+        items.add(new RFACLabelItem<Integer>()
+                .setLabel("Choose Color")
+                .setIconNormalColor(0xff4e342e)
+                .setIconPressedColor(0xff3e2723)
+                .setLabelSizeSp(14)
+                .setWrapper(1)
+        );
+        items.add(new RFACLabelItem<Integer>()
+                .setLabel("Add Text")
+                .setIconNormalColor(0xff056f00)
+                .setIconPressedColor(0xff0d5302)
+                .setLabelColor(0xff056f00)
+                .setWrapper(2)
+        );
+
+        rfaContent
+                .setItems(items)
+                .setIconShadowRadius(5)
+                .setIconShadowColor(0xff888888)
+                .setIconShadowDy(5)
+        ;
+
+        rfabHelper = new RapidFloatingActionHelper(
+                this,
+                mRfaLayout,
+                mRfaBtn,
+                rfaContent
+        ).build();
     }
 
+    @Override
+    public void onRFACItemLabelClick(int position, RFACLabelItem item) {
+        Toast.makeText(this, "clicked label: " + position, Toast.LENGTH_SHORT).show();
+        rfabHelper.toggleContent();
+    }
+
+    @Override
+    public void onRFACItemIconClick(int position, RFACLabelItem item) {
+        Toast.makeText(this, "clicked icon: " + position, Toast.LENGTH_SHORT).show();
+        rfabHelper.toggleContent();
+    }
 
     /***
      * On click method for capture image button
@@ -133,11 +201,12 @@ public class MainActivity extends AppCompatActivity {
 
         mCaptureButton.setVisibility(View.GONE);
         mDrawingView.setVisibility(View.VISIBLE);
+        mRfaLayout.setVisibility(View.VISIBLE);
 
-        //hideActionBar();
+        hideActionBar();
     }
 
-//    private void hideActionBar() {
-//        this.getSupportActionBar().hide();
-//    }
+    private void hideActionBar() {
+        this.getSupportActionBar().hide();
+    }
 }
