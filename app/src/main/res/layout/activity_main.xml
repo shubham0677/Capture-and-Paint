@@ -67,25 +67,70 @@
         rfal:layout_constraintTop_toTopOf="parent"
         rfal:layout_constraintHorizontal_bias="0.948"
         rfal:layout_constraintVertical_bias="0.951">
+
+        <View
+            android:id="@+id/empty_view"
+            android:layout_height="5dp"
+            android:layout_width="match_parent"
+            android:visibility="invisible"
+            android:layout_alignParentBottom="true"
+            />
+
+        <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton
+            xmlns:rfab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/new_image_rfab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/empty_view"
+            android:layout_margin="8dp"
+            rfab:rfab_size="normal"
+            rfab:rfab_drawable="@drawable/ic_camera_white_24dp"
+            rfab:rfab_color_normal="#37474f"
+            rfab:rfab_color_pressed="#263238"
+            />
+
+        <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton
+            xmlns:rfab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/save_image_rfab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/empty_view"
+            android:layout_toEndOf="@+id/new_image_rfab"
+            android:layout_margin="8dp"
+            rfab:rfab_size="normal"
+            rfab:rfab_drawable="@drawable/ic_save_white_24dp"
+            rfab:rfab_color_normal="#37474f"
+            rfab:rfab_color_pressed="#263238"
+            />
+
+        <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton
+            xmlns:rfab="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cancel_image_rfab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/empty_view"
+            android:layout_toEndOf="@+id/save_image_rfab"
+            android:layout_margin="8dp"
+            rfab:rfab_size="normal"
+            rfab:rfab_drawable="@drawable/ic_cancel_white_24dp"
+            rfab:rfab_color_normal="#37474f"
+            rfab:rfab_color_pressed="#263238"
+            />
+
         <com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton
             xmlns:rfab="http://schemas.android.com/apk/res-auto"
             android:id="@+id/activity_main_rfab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp"
-            android:padding="8dp"
+            android:layout_alignParentEnd="true"
+            android:layout_above="@id/empty_view"
+            android:layout_margin="8dp"
             rfab:rfab_size="normal"
-            rfab:rfab_drawable="@drawable/rfab__drawable_rfab_default"
+            rfab:rfab_drawable="@drawable/ic_edit_white_24dp"
             rfab:rfab_color_normal="#37474f"
             rfab:rfab_color_pressed="#263238"
-            rfab:rfab_shadow_radius="7dp"
-            rfab:rfab_shadow_color="#999999"
-            rfab:rfab_shadow_dx="0dp"
-            rfab:rfab_shadow_dy="5dp"
             />
+
     </com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout>
 
 </android.support.constraint.ConstraintLayout>
